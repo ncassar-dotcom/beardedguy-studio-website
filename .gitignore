@@ -1,0 +1,19 @@
+# Local credentials and configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local tools and temporary output
+.agents/
+.codex/
+node_modules/
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Design reference screenshots, not website assets
+/Screenshot*.png
