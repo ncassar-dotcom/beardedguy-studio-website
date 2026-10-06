@@ -1,6 +1,6 @@
 <?php
 $recipientEmail = 'info@n-vil.com';
-$fromEmail = 'website@n-vil.com';
+$fromEmail = 'info@n-vil.com';
 $fromName = 'Beardedguy Studio Website';
 
 function clean_input($value) {
@@ -23,8 +23,42 @@ function respond($ok, $message, $status = 200) {
     exit;
 }
 
+$allowedOrigins = array(
+    'https://ncassar-dotcom.github.io',
+    'https://n-vil.com',
+    'https://www.n-vil.com',
+    'http://127.0.0.1:8010',
+    'http://localhost:8010'
+);
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+header('Vary: Origin');
+header('Cache-Control: no-store');
+
+if ($origin !== '') {
+    if (!in_array($origin, $allowedOrigins, true)) {
+        respond(false, 'This website is not allowed to submit enquiries.', 403);
+    }
+    header('Access-Control-Allow-Origin: ' . $origin);
+}
+
+// The GitHub-hosted form makes a preflight request before its POST.
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header('Access-Control-Allow-Methods: POST, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+    header('Access-Control-Max-Age: 600');
+    http_response_code(204);
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Allow: POST, OPTIONS');
     respond(false, 'Please send the form from the contact page.', 405);
+}
+
+foreach (array('name', 'email', 'project', 'message') as $field) {
+    if (isset($_POST[$field]) && !is_string($_POST[$field])) {
+        respond(false, 'Please provide valid enquiry details.', 422);
+    }
 }
 
 $name = clean_input($_POST['name'] ?? '');
@@ -40,6 +74,10 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     respond(false, 'Please enter a valid email address.', 422);
 }
 
+if (strlen($name) > 200 || strlen($email) > 254 || strlen($project) > 200 || strlen($message) > 10000) {
+    respond(false, 'Please shorten your enquiry and try again.', 422);
+}
+
 $subject = 'Website enquiry from ' . $name;
 $body = "Name: {$name}\n";
 $body .= "Email: {$email}\n";
@@ -48,7 +86,7 @@ $body .= "Message:\n{$message}\n";
 
 $headers = array(
     'From: ' . $fromName . ' <' . $fromEmail . '>',
-    'Reply-To: ' . $name . ' <' . $email . '>',
+    'Reply-To: ' . $email,
     'Content-Type: text/plain; charset=UTF-8',
     'X-Mailer: PHP/' . phpversion()
 );

@@ -23,7 +23,9 @@ Open http://127.0.0.1:8010/index.html. No build step is required.
 
 ## Contact form and hosting
 
-The contact form uses PHP's `mail()` function. Sending requires a PHP-capable host with an outbound mail service configured, and sender addresses authorized for the domain. Starting the local preview alone does not configure email delivery.
+The contact form posts to `https://www.n-vil.com/send-contact.php`. The handler uses PHP's `mail()` function, sending from and to `info@n-vil.com` and setting Reply-To to the visitor's email. Sending requires the n-vil.com host's outbound mail service to be configured and authorized for this domain. Starting the local preview alone does not configure email delivery.
+
+Upload `send-contact.php` into the n-vil.com document root using cPanel File Manager, replacing the previous handler after keeping a backup outside the public web root. The updated handler permits requests from the GitHub Pages origin and handles browser preflight requests. It must be uploaded separately whenever it changes; GitHub Pages only deploys the static frontend. No mailbox password belongs in this repository or in the frontend.
 
 GitHub Pages can serve the static pages but cannot execute the PHP contact handler. This repository stores the website source; creating or pushing to it does not deploy the website.
 
@@ -33,6 +35,6 @@ Local design-reference screenshots, development folders and credentials are excl
 
 The workflow in `.github/workflows/deploy-pages.yml` deploys the static website on pushes to `main`, or when started manually from GitHub Actions. Enable GitHub Pages with GitHub Actions as the publishing source first. The repository must be public or on a GitHub plan that supports private Pages repositories.
 
-The deployment includes HTML, CSS, JavaScript and `assets/`. It excludes PHP source and repository-only files. The PHP contact form cannot send messages on GitHub Pages; it requires a separate backend before it can work on this host.
+The deployment includes HTML, CSS, JavaScript and `assets/`. It excludes PHP source and repository-only files. Email is handled separately by the n-vil.com PHP endpoint, which must have the current handler uploaded through cPanel before the GitHub Pages contact form can work.
 
 Once deployment succeeds, the website address is https://ncassar-dotcom.github.io/beardedguy-studio-website/.
