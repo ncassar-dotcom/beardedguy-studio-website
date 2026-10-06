@@ -9,6 +9,7 @@
 .agents/
 .codex/
 node_modules/
+_site/
 *.log
 *.tmp
 .DS_Store

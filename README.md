@@ -28,3 +28,11 @@ The contact form uses PHP's `mail()` function. Sending requires a PHP-capable ho
 GitHub Pages can serve the static pages but cannot execute the PHP contact handler. This repository stores the website source; creating or pushing to it does not deploy the website.
 
 Local design-reference screenshots, development folders and credentials are excluded from version control.
+
+## GitHub Pages deployment
+
+The workflow in `.github/workflows/deploy-pages.yml` deploys the static website on pushes to `main`, or when started manually from GitHub Actions. Enable GitHub Pages with GitHub Actions as the publishing source first. The repository must be public or on a GitHub plan that supports private Pages repositories.
+
+The deployment includes HTML, CSS, JavaScript and `assets/`. It excludes PHP source and repository-only files. The PHP contact form cannot send messages on GitHub Pages; it requires a separate backend before it can work on this host.
+
+Once deployment succeeds, the website address is https://ncassar-dotcom.github.io/beardedguy-studio-website/.
