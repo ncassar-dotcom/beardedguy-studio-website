@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#021321">
     <meta name="description" content="Local motion video grid by Beardedguy Studio.">
     <title>Motion Videos - Beardedguy Studio</title>
     <link rel="icon" href="assets/logo.png">
@@ -10,36 +11,39 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="responsive.css">
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header frame-header">
-      <a class="brand" href="index.html"><img src="assets/header-icon.png" alt="Beardedguy Studio logo" width="60" height="60"></a>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a class="active" href="work.html">Work</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+      <a class="brand" href="index.html"><img src="assets/header-icon.png" alt="Beardedguy Studio logo" width="69" height="69"></a>
+      <nav id="main-navigation" class="main-nav" aria-label="Main navigation">
+        <a class="active" aria-current="page" href="work.html">Work</a><a href="about.html">About</a><a href="contact.html">Contact</a>
       </nav>
       <div class="header-actions"><a class="pill-link" href="https://www.teepublic.com/en-gb/user/beardedguy" target="_blank" rel="noreferrer">Merch</a><a class="pill-link" href="http://www.n-vil.com/FolioBook.pdf" target="_blank" rel="noreferrer">Folio Book</a></div>
-      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="main-navigation"><span></span><span></span><span></span></button>
     </header>
-    <main>
+    <main id="main-content" tabindex="-1">
       <section class="page-hero">
         <div class="page-hero-inner">
           <h1 class="motion-title">Motion</h1>
           <p>Selected motion pieces downloaded locally from the original Beardedguy Studio motion portfolio.</p>
         </div>
       </section>
+      <nav class="work-nav" aria-label="Work categories"><a href="work.html">All work</a><a href="websites.html">Websites</a><a href="motion.html" aria-current="page">Motion</a><a href="branding.html">Branding / Logos</a><a href="apparel.html">Apparel</a></nav>
 
       <section class="page-section">
         <div class="video-grid local-video-grid">
-          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-01.mp4" data-video="assets/motion/motion-videos/motion-01.mp4" data-poster="assets/motion/motion-videos/motion-01.jpg" data-title="Motion 01"><img src="assets/motion/motion-videos/motion-01.jpg" alt="Motion 01"><span>Motion 01</span></a>
-          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-02.mp4" data-video="assets/motion/motion-videos/motion-02.mp4" data-poster="assets/motion/motion-videos/motion-02.jpg" data-title="Motion 02"><img src="assets/motion/motion-videos/motion-02.jpg" alt="Motion 02"><span>Motion 02</span></a>
-          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-03.mp4" data-video="assets/motion/motion-videos/motion-03.mp4" data-poster="assets/motion/motion-videos/motion-03.jpg" data-title="Motion 03"><img src="assets/motion/motion-videos/motion-03.jpg" alt="Motion 03"><span>Motion 03</span></a>
-          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-04.mp4" data-video="assets/motion/motion-videos/motion-04.mp4" data-poster="assets/motion/motion-videos/motion-04.jpg" data-title="Motion 04"><img src="assets/motion/motion-videos/motion-04.jpg" alt="Motion 04"><span>Motion 04</span></a>
-          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-05.mp4" data-video="assets/motion/motion-videos/motion-05.mp4" data-poster="assets/motion/motion-videos/motion-05.jpg" data-title="Motion 05"><img src="assets/motion/motion-videos/motion-05.jpg" alt="Motion 05"><span>Motion 05</span></a>
-          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-06.mp4" data-video="assets/motion/motion-videos/motion-06.mp4" data-poster="assets/motion/motion-videos/motion-06.jpg" data-title="Motion 06"><img src="assets/motion/motion-videos/motion-06.jpg" alt="Motion 06"><span>Motion 06</span></a>
-          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-07.mp4" data-video="assets/motion/motion-videos/motion-07.mp4" data-poster="assets/motion/motion-videos/motion-07.jpg" data-title="Motion 07"><img src="assets/motion/motion-videos/motion-07.jpg" alt="Motion 07"><span>Motion 07</span></a>
-          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-08.mp4" data-video="assets/motion/motion-videos/motion-08.mp4" data-poster="assets/motion/motion-videos/motion-08.jpg" data-title="Motion 08"><img src="assets/motion/motion-videos/motion-08.jpg" alt="Motion 08"><span>Motion 08</span></a>
-          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-09.mp4" data-video="assets/motion/motion-videos/motion-09.mp4" data-poster="assets/motion/motion-videos/motion-09.jpg" data-title="Motion 09"><img src="assets/motion/motion-videos/motion-09.jpg" alt="Motion 09"><span>Motion 09</span></a>
-          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-10.mp4" data-video="assets/motion/motion-videos/motion-10.mp4" data-poster="assets/motion/motion-videos/motion-10.jpg" data-title="Motion 10"><img src="assets/motion/motion-videos/motion-10.jpg" alt="Motion 10"><span>Motion 10</span></a>
+          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-01.mp4" data-video="assets/motion/motion-videos/motion-01.mp4" data-poster="assets/motion/motion-videos/motion-01.jpg" data-title="Motion 01"><img src="assets/optimized/motion-motion-videos-motion-01-768.webp" srcset="assets/optimized/motion-motion-videos-motion-01-480.webp 480w, assets/optimized/motion-motion-videos-motion-01-768.webp 768w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Motion 01" width="768" height="576" loading="lazy" decoding="async"><span>Motion 01</span></a>
+          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-02.mp4" data-video="assets/motion/motion-videos/motion-02.mp4" data-poster="assets/motion/motion-videos/motion-02.jpg" data-title="Motion 02"><img src="assets/optimized/motion-motion-videos-motion-02-768.webp" srcset="assets/optimized/motion-motion-videos-motion-02-480.webp 480w, assets/optimized/motion-motion-videos-motion-02-768.webp 768w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Motion 02" width="768" height="576" loading="lazy" decoding="async"><span>Motion 02</span></a>
+          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-03.mp4" data-video="assets/motion/motion-videos/motion-03.mp4" data-poster="assets/motion/motion-videos/motion-03.jpg" data-title="Motion 03"><img src="assets/optimized/motion-motion-videos-motion-03-862.webp" srcset="assets/optimized/motion-motion-videos-motion-03-480.webp 480w, assets/optimized/motion-motion-videos-motion-03-862.webp 862w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Motion 03" width="862" height="576" loading="lazy" decoding="async"><span>Motion 03</span></a>
+          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-04.mp4" data-video="assets/motion/motion-videos/motion-04.mp4" data-poster="assets/motion/motion-videos/motion-04.jpg" data-title="Motion 04"><img src="assets/optimized/motion-motion-videos-motion-04-1024.webp" srcset="assets/optimized/motion-motion-videos-motion-04-480.webp 480w, assets/optimized/motion-motion-videos-motion-04-960.webp 960w, assets/optimized/motion-motion-videos-motion-04-1024.webp 1024w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Motion 04" width="1024" height="576" loading="lazy" decoding="async"><span>Motion 04</span></a>
+          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-05.mp4" data-video="assets/motion/motion-videos/motion-05.mp4" data-poster="assets/motion/motion-videos/motion-05.jpg" data-title="Motion 05"><img src="assets/optimized/motion-motion-videos-motion-05-862.webp" srcset="assets/optimized/motion-motion-videos-motion-05-480.webp 480w, assets/optimized/motion-motion-videos-motion-05-862.webp 862w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Motion 05" width="862" height="576" loading="lazy" decoding="async"><span>Motion 05</span></a>
+          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-06.mp4" data-video="assets/motion/motion-videos/motion-06.mp4" data-poster="assets/motion/motion-videos/motion-06.jpg" data-title="Motion 06"><img src="assets/optimized/motion-motion-videos-motion-06-1024.webp" srcset="assets/optimized/motion-motion-videos-motion-06-480.webp 480w, assets/optimized/motion-motion-videos-motion-06-960.webp 960w, assets/optimized/motion-motion-videos-motion-06-1024.webp 1024w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Motion 06" width="1024" height="576" loading="lazy" decoding="async"><span>Motion 06</span></a>
+          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-07.mp4" data-video="assets/motion/motion-videos/motion-07.mp4" data-poster="assets/motion/motion-videos/motion-07.jpg" data-title="Motion 07"><img src="assets/optimized/motion-motion-videos-motion-07-1024.webp" srcset="assets/optimized/motion-motion-videos-motion-07-480.webp 480w, assets/optimized/motion-motion-videos-motion-07-960.webp 960w, assets/optimized/motion-motion-videos-motion-07-1024.webp 1024w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Motion 07" width="1024" height="564" loading="lazy" decoding="async"><span>Motion 07</span></a>
+          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-08.mp4" data-video="assets/motion/motion-videos/motion-08.mp4" data-poster="assets/motion/motion-videos/motion-08.jpg" data-title="Motion 08"><img src="assets/optimized/motion-motion-videos-motion-08-784.webp" srcset="assets/optimized/motion-motion-videos-motion-08-480.webp 480w, assets/optimized/motion-motion-videos-motion-08-784.webp 784w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Motion 08" width="784" height="576" loading="lazy" decoding="async"><span>Motion 08</span></a>
+          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-09.mp4" data-video="assets/motion/motion-videos/motion-09.mp4" data-poster="assets/motion/motion-videos/motion-09.jpg" data-title="Motion 09"><img src="assets/optimized/motion-motion-videos-motion-09-784.webp" srcset="assets/optimized/motion-motion-videos-motion-09-480.webp 480w, assets/optimized/motion-motion-videos-motion-09-784.webp 784w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Motion 09" width="784" height="576" loading="lazy" decoding="async"><span>Motion 09</span></a>
+          <a class="video-card local-video-card" href="assets/motion/motion-videos/motion-10.mp4" data-video="assets/motion/motion-videos/motion-10.mp4" data-poster="assets/motion/motion-videos/motion-10.jpg" data-title="Motion 10"><img src="assets/optimized/motion-motion-videos-motion-10-784.webp" srcset="assets/optimized/motion-motion-videos-motion-10-480.webp 480w, assets/optimized/motion-motion-videos-motion-10-784.webp 784w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Motion 10" width="784" height="576" loading="lazy" decoding="async"><span>Motion 10</span></a>
         </div>
       </section>
 

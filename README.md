@@ -17,8 +17,9 @@ Open http://127.0.0.1:8010/index.html. No build step is required.
 - `index.html`: homepage.
 - `work.html`: links to websites, motion, branding and apparel.
 - `about.html` and `contact.html`: studio information and enquiries.
-- `styles.css` and `script.js`: shared styles and interactions.
+- `styles.css`, `responsive.css` and `script.js`: shared styles, responsive layouts and interactions.
 - `assets/`: images, icons and local portfolio videos.
+- `assets/optimized/`: compressed WebP variants used by responsive image markup; original images are preserved.
 - `send-contact.php`: contact-form handler.
 
 ## Contact form and hosting

@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#021321">
     <meta name="description" content="Work categories for Beardedguy Studio: websites, motion, branding and apparel.">
     <title>Work - Beardedguy Studio</title>
     <link rel="icon" href="assets/logo.png">
@@ -10,30 +11,33 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="responsive.css">
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header frame-header">
-      <a class="brand" href="index.html"><img src="assets/header-icon.png" alt="Beardedguy Studio logo" width="60" height="60"></a>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a class="active" href="work.html">Work</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+      <a class="brand" href="index.html"><img src="assets/header-icon.png" alt="Beardedguy Studio logo" width="69" height="69"></a>
+      <nav id="main-navigation" class="main-nav" aria-label="Main navigation">
+        <a class="active" aria-current="page" href="work.html">Work</a><a href="about.html">About</a><a href="contact.html">Contact</a>
       </nav>
       <div class="header-actions"><a class="pill-link" href="https://www.teepublic.com/en-gb/user/beardedguy" target="_blank" rel="noreferrer">Merch</a><a class="pill-link" href="http://www.n-vil.com/FolioBook.pdf" target="_blank" rel="noreferrer">Folio Book</a></div>
-      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="main-navigation"><span></span><span></span><span></span></button>
     </header>
-    <main>
+    <main id="main-content" tabindex="-1">
       <section class="page-hero">
         <div class="page-hero-inner">
           <h1>Work</h1>
           <p>Selected Beardedguy Studio work grouped by discipline.</p>
         </div>
       </section>
+      <nav class="work-nav" aria-label="Work categories"><a href="work.html" aria-current="page">All work</a><a href="websites.html">Websites</a><a href="motion.html">Motion</a><a href="branding.html">Branding / Logos</a><a href="apparel.html">Apparel</a></nav>
 
       <section class="page-section work-categories-page">
         <div class="work-grid frame-work-grid work-category-grid">
-          <a class="work-card is-large" href="websites.html"><img src="assets/work-mobile.jpg" alt="Websites"><span>Websites</span></a>
-          <a class="work-card" href="motion.html"><img src="assets/work-promo.jpg" alt="Motion"><span>Motion</span></a>
-          <a class="work-card" href="branding.html"><img src="assets/work-exient.jpg" alt="Branding and logos"><span>Branding/Logos</span></a>
-          <a class="work-card is-tall" href="apparel.html"><img src="assets/hero-hoodie.png" alt="Apparel"><span>Apparel</span></a>
+          <a class="work-card is-large" href="websites.html"><img src="assets/optimized/work-mobile-1200.webp" srcset="assets/optimized/work-mobile-480.webp 480w, assets/optimized/work-mobile-960.webp 960w, assets/optimized/work-mobile-1200.webp 1200w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Websites" width="1624" height="1269" loading="lazy" decoding="async"><span>Websites</span></a>
+          <a class="work-card" href="motion.html"><img src="assets/optimized/work-promo-1200.webp" srcset="assets/optimized/work-promo-480.webp 480w, assets/optimized/work-promo-960.webp 960w, assets/optimized/work-promo-1200.webp 1200w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Motion" width="1920" height="1501" loading="lazy" decoding="async"><span>Motion</span></a>
+          <a class="work-card" href="branding.html"><img src="assets/optimized/work-exient-1200.webp" srcset="assets/optimized/work-exient-480.webp 480w, assets/optimized/work-exient-960.webp 960w, assets/optimized/work-exient-1200.webp 1200w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Branding and logos" width="1380" height="1080" loading="lazy" decoding="async"><span>Branding/Logos</span></a>
+          <a class="work-card is-tall" href="apparel.html"><img src="assets/optimized/hero-hoodie-1400.webp" srcset="assets/optimized/hero-hoodie-480.webp 480w, assets/optimized/hero-hoodie-960.webp 960w, assets/optimized/hero-hoodie-1400.webp 1400w" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) calc((100vw - 76px) / 2), 600px" alt="Apparel" width="6500" height="6500" loading="lazy" decoding="async"><span>Apparel</span></a>
         </div>
       </section>
     </main>

@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#021321">
     <meta name="description" content="Collection of videos done in After Effects by Beardedguy Studio.">
     <title>Collection of Videos - Beardedguy Studio</title>
     <link rel="icon" href="assets/logo.png">
@@ -10,23 +11,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="responsive.css">
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header frame-header">
-      <a class="brand" href="index.html"><img src="assets/header-icon.png" alt="Beardedguy Studio logo" width="60" height="60"></a>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a class="active" href="work.html">Work</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+      <a class="brand" href="index.html"><img src="assets/header-icon.png" alt="Beardedguy Studio logo" width="69" height="69"></a>
+      <nav id="main-navigation" class="main-nav" aria-label="Main navigation">
+        <a class="active" aria-current="page" href="work.html">Work</a><a href="about.html">About</a><a href="contact.html">Contact</a>
       </nav>
       <div class="header-actions"><a class="pill-link" href="https://www.teepublic.com/en-gb/user/beardedguy" target="_blank" rel="noreferrer">Merch</a><a class="pill-link" href="http://www.n-vil.com/FolioBook.pdf" target="_blank" rel="noreferrer">Folio Book</a></div>
-      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="main-navigation"><span></span><span></span><span></span></button>
     </header>
-    <main>
+    <main id="main-content" tabindex="-1">
       <section class="page-hero">
         <div class="page-hero-inner">
           <h1 class="motion-title">Collection of Videos</h1>
           <p>Selected video pieces from the original Beardedguy Studio motion portfolio.</p>
         </div>
       </section>
+      <nav class="work-nav" aria-label="Work categories"><a href="work.html">All work</a><a href="websites.html">Websites</a><a href="motion.html" aria-current="page">Motion</a><a href="branding.html">Branding / Logos</a><a href="apparel.html">Apparel</a></nav>
 
       <section class="page-section">
         <div class="video-grid">

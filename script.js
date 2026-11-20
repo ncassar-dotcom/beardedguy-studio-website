@@ -1,55 +1,94 @@
 const nav = document.querySelector(".main-nav");
 const toggle = document.querySelector(".menu-toggle");
 const siteHeader = document.querySelector(".frame-header");
+const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+const compactLayout = window.matchMedia("(max-width: 1100px)");
 
 if (siteHeader) {
-  const updateHeader = () => {
-    siteHeader.classList.toggle("is-scrolled", window.scrollY > 90);
-  };
-
+  const updateHeader = () => siteHeader.classList.toggle("is-scrolled", window.scrollY > 24);
   updateHeader();
   window.addEventListener("scroll", updateHeader, { passive: true });
   window.addEventListener("pageshow", updateHeader);
 }
 
-if (toggle && nav) {
-  toggle.addEventListener("click", () => {
-    const isOpen = nav.classList.toggle("open");
-    toggle.setAttribute("aria-expanded", String(isOpen));
+if (toggle && nav && siteHeader) {
+  nav.id = "main-navigation";
+  toggle.setAttribute("aria-controls", nav.id);
+  document.querySelectorAll(".header-actions a").forEach((link) => {
+    const item = link.cloneNode(true);
+    item.className = "mobile-nav-action";
+    nav.append(item);
   });
+  const setMenuOpen = (open, restoreFocus = false) => {
+    nav.classList.toggle("open", open);
+    siteHeader.classList.toggle("menu-open", open);
+    document.body.classList.toggle("nav-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    document.querySelectorAll("main, .site-footer, .scroll-orb").forEach((el) => { el.inert = open; });
+    if (restoreFocus) toggle.focus({ preventScroll: true });
+  };
+  toggle.addEventListener("click", () => setMenuOpen(!nav.classList.contains("open")));
+  nav.addEventListener("click", (event) => {
+    if (event.target.closest("a")) setMenuOpen(false);
+  });
+  document.addEventListener("click", (event) => {
+    if (nav.classList.contains("open") && !siteHeader.contains(event.target)) setMenuOpen(false);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (!nav.classList.contains("open")) return;
+    if (event.key === "Escape") setMenuOpen(false, true);
+    if (event.key === "Tab") {
+      const links = [...siteHeader.querySelectorAll("a, button")].filter((el) => el.getClientRects().length);
+      const first = links[0], last = links[links.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
+  });
+  compactLayout.addEventListener("change", () => setMenuOpen(false));
+  window.addEventListener("pageshow", () => setMenuOpen(false));
 }
+
+// Prefetch only the HTML of likely destinations; never delay a link click.
+const prefetchedPages = new Set();
+const prefetchPage = (event) => {
+  if (navigator.connection?.saveData || /(^|-)2g$/.test(navigator.connection?.effectiveType || "")) return;
+  const link = event.target.closest("a[href]");
+  if (!link || link.target || link.hasAttribute("download")) return;
+  const url = new URL(link.href);
+  if (url.origin !== location.origin || !url.pathname.endsWith(".html") || url.pathname === location.pathname || prefetchedPages.has(url.href) || prefetchedPages.size >= 4) return;
+  prefetchedPages.add(url.href);
+  const hint = document.createElement("link");
+  hint.rel = "prefetch";
+  hint.href = url.href;
+  document.head.append(hint);
+};
+document.addEventListener("pointerover", prefetchPage, { passive: true });
+document.addEventListener("focusin", prefetchPage);
 
 const form = document.querySelector(".contact-form");
 const note = document.querySelector(".form-note");
-
 if (form && note) {
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const data = new FormData(form);
     const button = form.querySelector(".submit");
-
+    if (button?.disabled) return;
     note.classList.remove("is-error", "is-success");
     note.textContent = "Sending your enquiry...";
     if (button) button.disabled = true;
-
     try {
       const response = await fetch(form.action, {
         method: "POST",
-        body: data,
-        headers: {
-          Accept: "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-        },
+        body: new FormData(form),
+        headers: { Accept: "application/json", "X-Requested-With": "XMLHttpRequest" },
+        signal: AbortSignal.timeout(20000),
       });
       const result = await response.json();
-
-      note.textContent = result.message || "Thank you. Your enquiry has been sent.";
-      note.classList.add(response.ok && result.ok ? "is-success" : "is-error");
-
-      if (response.ok && result.ok) {
-        form.reset();
-      }
-    } catch (error) {
+      const succeeded = response.ok && result.ok;
+      note.textContent = result.message || (succeeded ? "Thank you. Your enquiry has been sent." : "Sorry, your enquiry could not be sent.");
+      note.classList.add(succeeded ? "is-success" : "is-error");
+      if (succeeded) form.reset();
+    } catch {
       note.textContent = "Sorry, the message could not be sent. Please email info@n-vil.com directly.";
       note.classList.add("is-error");
     } finally {
@@ -60,80 +99,59 @@ if (form && note) {
 
 const hero = document.querySelector(".hero");
 const heroVisual = document.querySelector(".hero-visual");
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-window.addEventListener("pageshow", () => document.body.classList.remove("page-leaving"));
-
-document.addEventListener("click", (event) => {
-  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const link = event.target.closest("a[href]");
-  if (!link || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
-  const destination = new URL(link.href, window.location.href);
-  if (destination.origin !== window.location.origin || !destination.pathname.endsWith(".html")) return;
-  if (destination.pathname === window.location.pathname && destination.search === window.location.search) return;
-
-  event.preventDefault();
-  if (document.body.classList.contains("page-leaving")) return;
-  document.body.classList.add("page-leaving");
-  window.setTimeout(() => window.location.assign(destination.href), 180);
-});
-
-if (hero && heroVisual && !reducedMotion) {
-  let targetX = 0;
-  let targetY = 0;
-  let currentX = 0;
-  let currentY = 0;
-
-  const renderParallax = () => {
-    currentX += (targetX - currentX) * 0.035;
-    currentY += (targetY - currentY) * 0.035;
-    heroVisual.style.setProperty("--hero-parallax-x", `${currentX.toFixed(2)}px`);
-    heroVisual.style.setProperty("--hero-parallax-y", `${currentY.toFixed(2)}px`);
-    requestAnimationFrame(renderParallax);
+if (hero && heroVisual && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  let targetX = 0, targetY = 0, currentX = 0, currentY = 0, frame = 0;
+  const reset = () => {
+    cancelAnimationFrame(frame);
+    frame = 0;
+    targetX = targetY = currentX = currentY = 0;
+    heroVisual.style.removeProperty("--hero-parallax-x");
+    heroVisual.style.removeProperty("--hero-parallax-y");
   };
-
+  const render = () => {
+    frame = 0;
+    if (motionPreference.matches || compactLayout.matches || document.hidden) { reset(); return; }
+    currentX += (targetX - currentX) * 0.06;
+    currentY += (targetY - currentY) * 0.06;
+    heroVisual.style.setProperty("--hero-parallax-x", currentX.toFixed(2) + "px");
+    heroVisual.style.setProperty("--hero-parallax-y", currentY.toFixed(2) + "px");
+    if (Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05) frame = requestAnimationFrame(render);
+  };
   hero.addEventListener("pointermove", (event) => {
-    if (window.innerWidth < 981) return;
+    if (compactLayout.matches || motionPreference.matches) return;
     const rect = hero.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-    targetX = x * 24;
-    targetY = y * 16;
+    targetX = ((event.clientX - rect.left) / rect.width - 0.5) * 24;
+    targetY = ((event.clientY - rect.top) / rect.height - 0.5) * 16;
+    if (!frame) frame = requestAnimationFrame(render);
   });
-
   hero.addEventListener("pointerleave", () => {
-    targetX = 0;
-    targetY = 0;
+    targetX = targetY = 0;
+    if (!frame) frame = requestAnimationFrame(render);
   });
-
-  renderParallax();
+  motionPreference.addEventListener("change", reset);
+  compactLayout.addEventListener("change", reset);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) reset(); });
 }
-
 
 const scrollOrb = document.querySelector(".scroll-orb");
-
 if (scrollOrb) {
-  const getScrollY = () => window.scrollY || document.documentElement.scrollTop || 0;
-
   const updateScrollOrb = () => {
-    const isScrolled = getScrollY() > 8;
-    scrollOrb.classList.toggle("is-up", isScrolled);
-    scrollOrb.setAttribute("href", isScrolled ? "#before-hero" : "#after-hero");
-    scrollOrb.setAttribute("aria-label", isScrolled ? "Back to top" : "Scroll down");
+    const scrolled = window.scrollY > 8;
+    scrollOrb.classList.toggle("is-up", scrolled);
+    scrollOrb.setAttribute("href", scrolled ? "#before-hero" : "#after-hero");
+    scrollOrb.setAttribute("aria-label", scrolled ? "Back to top" : "Scroll down");
   };
-
   scrollOrb.addEventListener("click", (event) => {
-    if (getScrollY() > 8) {
+    if (window.scrollY > 8) {
       event.preventDefault();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: motionPreference.matches ? "instant" : "smooth" });
     }
   });
-
   updateScrollOrb();
   window.addEventListener("scroll", updateScrollOrb, { passive: true });
-  window.addEventListener("resize", updateScrollOrb);
+  window.addEventListener("pageshow", updateScrollOrb);
 }
+
 const videoModal = document.querySelector(".video-modal");
 const videoFrame = document.querySelector(".video-modal__frame");
 const modalVideo = document.querySelector(".video-modal__video");
@@ -142,142 +160,92 @@ const videoClose = document.querySelector(".video-modal__close");
 const videoPanel = document.querySelector(".video-modal__panel");
 const videoCards = document.querySelectorAll(".video-card");
 
-if (videoModal && videoClose && videoCards.length) {
-  const openVideo = (card) => {
-    const iframe = card.querySelector("iframe");
-    const localVideo = card.querySelector("video");
-
-    if (iframe && videoFrame) {
-      const source = iframe.getAttribute("src");
-      const title = iframe.getAttribute("title") || "Selected video";
-      if (!source) return;
-      videoFrame.src = source;
-      videoFrame.title = title;
-    } else if (card.dataset.video && modalVideo) {
-      const source = card.dataset.video;
-      const poster = card.dataset.poster;
-      if (!source) return;
-      modalVideo.poster = poster || "";
-      modalVideo.title = card.dataset.title || "Selected video";
-      if (modalStatus) modalStatus.textContent = "Loading video...";
-    } else if (localVideo && modalVideo) {
-      const source = localVideo.currentSrc || localVideo.getAttribute("src");
-      const poster = localVideo.getAttribute("poster");
-      if (!source) return;
-      modalVideo.poster = poster || "";
-      modalVideo.title = localVideo.getAttribute("title") || "Selected video";
-      if (modalStatus) modalStatus.textContent = "Loading video...";
-    } else {
-      return;
-    }
-
-    videoModal.classList.add("is-open");
-    videoModal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("modal-open");
-    videoClose.focus();
-
-    const sizeVideoPanel = () => {
-      if (!videoPanel || !modalVideo.videoWidth || !modalVideo.videoHeight) return;
-      const maxWidth = Math.max(280, window.innerWidth - 72);
-      const maxHeight = Math.max(220, window.innerHeight - 116);
-      const scale = Math.min(1, maxWidth / modalVideo.videoWidth, maxHeight / modalVideo.videoHeight);
-      const width = Math.round(modalVideo.videoWidth * scale);
-      const height = Math.round(modalVideo.videoHeight * scale);
-      videoPanel.style.setProperty("--video-width", `${width}px`);
-      videoPanel.style.setProperty("--video-height", `${height}px`);
-    };
-
-    const playModalVideo = () => {
-      modalVideo.muted = true;
-      modalVideo.load();
-      modalVideo.addEventListener("loadedmetadata", sizeVideoPanel, { once: true });
-      const playPromise = modalVideo.play();
-
-      if (playPromise && typeof playPromise.then === "function") {
-        playPromise
-          .then(() => {
-            sizeVideoPanel();
-            if (modalStatus) modalStatus.textContent = "";
-          })
-          .catch(() => {
-            sizeVideoPanel();
-            if (modalStatus) modalStatus.textContent = "Press play to start the video.";
-          });
-      } else {
-        sizeVideoPanel();
-        if (modalStatus) modalStatus.textContent = "";
-      }
-    };
-
-    const source = card.dataset.video || localVideo?.currentSrc || localVideo?.getAttribute("src");
-    if (source && modalVideo) {
-      if (modalStatus) modalStatus.textContent = "Loading video...";
-
-      fetch(source)
-        .then((response) => {
-          if (!response.ok) throw new Error("Video could not be loaded");
-          return response.blob();
-        })
-        .then((blob) => {
-          if (modalVideo.dataset.objectUrl) URL.revokeObjectURL(modalVideo.dataset.objectUrl);
-          const objectUrl = URL.createObjectURL(blob);
-          modalVideo.dataset.objectUrl = objectUrl;
-          modalVideo.src = objectUrl;
-          playModalVideo();
-        })
-        .catch(() => {
-          modalVideo.src = source;
-          playModalVideo();
-        });
-    }
+if (videoModal && videoClose && videoPanel && videoCards.length) {
+  // Keep the fixed player outside the animated main content.
+  document.body.append(videoModal);
+  let opener = null;
+  const setBackgroundInert = (inert) => {
+    document.querySelectorAll("main, .site-header, .site-footer, .scroll-orb").forEach((el) => { el.inert = inert; });
   };
-
+  const sizeVideoPanel = () => {
+    const naturalWidth = modalVideo?.videoWidth || 1120;
+    const naturalHeight = modalVideo?.videoHeight || 630;
+    const viewport = window.visualViewport;
+    const maxWidth = Math.max(1, (viewport?.width || window.innerWidth) - 32);
+    const maxHeight = Math.max(1, (viewport?.height || window.innerHeight) - 120);
+    const scale = Math.min(1, maxWidth / naturalWidth, maxHeight / naturalHeight);
+    videoPanel.style.width = Math.floor(naturalWidth * scale) + "px";
+    videoPanel.style.height = Math.floor(naturalHeight * scale) + "px";
+  };
   const closeVideo = () => {
     videoModal.classList.remove("is-open");
     videoModal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("modal-open");
-
-    if (videoFrame) {
-      videoFrame.src = "";
-    }
-
+    setBackgroundInert(false);
+    if (videoFrame) videoFrame.removeAttribute("src");
     if (modalVideo) {
       modalVideo.pause();
-      if (modalVideo.dataset.objectUrl) {
-        URL.revokeObjectURL(modalVideo.dataset.objectUrl);
-        delete modalVideo.dataset.objectUrl;
-      }
       modalVideo.removeAttribute("src");
       modalVideo.removeAttribute("poster");
       modalVideo.load();
     }
+    if (modalStatus) modalStatus.textContent = "";
+    opener?.focus({ preventScroll: true });
   };
-
+  const openVideo = (card) => {
+    const iframe = card.querySelector("iframe");
+    const source = card.dataset.video || card.querySelector("video")?.getAttribute("src");
+    if (!iframe?.getAttribute("src") && !source) return;
+    opener = card;
+    videoModal.classList.add("is-open");
+    videoModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    setBackgroundInert(true);
+    sizeVideoPanel();
+    videoClose.focus({ preventScroll: true });
+    if (iframe && videoFrame) {
+      videoFrame.src = iframe.src;
+      videoFrame.title = iframe.title || "Selected video";
+    } else if (source && modalVideo) {
+      modalVideo.poster = card.dataset.poster || "";
+      modalVideo.title = card.dataset.title || "Selected video";
+      if (modalStatus) modalStatus.textContent = "Loading video...";
+      // Stream directly so playback and seeking do not wait for a full-file download.
+      modalVideo.src = source;
+      modalVideo.load();
+      const promise = modalVideo.play();
+      promise?.catch(() => {
+        if (videoModal.classList.contains("is-open") && modalStatus) modalStatus.textContent = "Press play to start the video.";
+      });
+    }
+  };
+  if (modalVideo) {
+    modalVideo.addEventListener("loadedmetadata", sizeVideoPanel);
+    modalVideo.addEventListener("playing", () => { if (modalStatus) modalStatus.textContent = ""; });
+    modalVideo.addEventListener("error", () => { if (modalStatus && modalVideo.hasAttribute("src")) modalStatus.textContent = "This video could not be loaded. Please try again."; });
+  }
+  window.addEventListener("resize", sizeVideoPanel);
+  window.visualViewport?.addEventListener("resize", sizeVideoPanel);
   videoCards.forEach((card) => {
-    const title = card.querySelector("iframe")?.getAttribute("title") || card.dataset.title || card.querySelector("video")?.getAttribute("title") || "video";
+    const title = card.querySelector("iframe")?.title || card.dataset.title || "video";
     card.setAttribute("role", "button");
-    card.setAttribute("tabindex", "0");
-    card.setAttribute("aria-label", `Open ${title}`);
-
-    card.addEventListener("click", (event) => {
-      event.preventDefault();
-      openVideo(card);
-    });
+    card.tabIndex = 0;
+    card.setAttribute("aria-label", "Open " + title);
+    card.addEventListener("click", (event) => { event.preventDefault(); openVideo(card); });
     card.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        openVideo(card);
-      }
+      if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openVideo(card); }
     });
   });
-
   videoClose.addEventListener("click", closeVideo);
-  videoModal.addEventListener("click", (event) => {
-    if (event.target === videoModal) closeVideo();
-  });
+  videoModal.addEventListener("click", (event) => { if (event.target === videoModal) closeVideo(); });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && videoModal.classList.contains("is-open")) {
-      closeVideo();
+    if (!videoModal.classList.contains("is-open")) return;
+    if (event.key === "Escape") closeVideo();
+    if (event.key === "Tab") {
+      const controls = [...videoPanel.querySelectorAll("button, video, iframe")];
+      const first = controls[0], last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
     }
   });
 }

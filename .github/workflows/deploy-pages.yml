@@ -23,7 +23,7 @@ jobs:
       - name: Prepare static website
         run: |
           mkdir -p _site
-          cp -- *.html styles.css script.js _site/
+          cp -- *.html *.css script.js _site/
           cp -R -- assets _site/assets
           touch _site/.nojekyll
       - name: Upload website
